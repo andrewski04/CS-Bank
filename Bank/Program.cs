@@ -6,71 +6,44 @@ namespace Bank
 	{
 		static void Main(string[] args)
 		{
-			bool run = true;
-			while (run)
-			{
-				List<Bank> banks = new List<Bank>();
-				banks.Add(createTestBank("DrewskiBank"));
-				banks.Add(createTestBank("BruhBank"));
 
-				Console.WriteLine("Welcome to the official ATM of DrewskiBank");
-				Console.WriteLine("Please select the bank your account is under");
+			//creates a new banks and adds 2 hard coded test banks with users and accounts
+			List<Bank> banks = new List<Bank>();
+			banks.Add(createTestBank("AndrewBank"));
+			banks.Add(createTestBank2("RealBank"));
 
-				for (int i = 0; i < banks.Count; i++)
-				{
-					Console.WriteLine(i + 1 + ". " + banks[i].Name);
-				}
+			// initializes new atm interfaced to specific bank in list
+			ATM atm = new ATM(banks[0]);
+			atm.Run();
 
-				Console.Write("\nEnter number: ");
-				Bank bank = banks[Convert.ToInt32(Console.ReadLine()) - 1];
-
-				Console.Clear();
-				Console.WriteLine("\nEnter your account number: ");
-				Account account = bank.FindAccount(Console.ReadLine());
-				Console.WriteLine("\nEnter you pin: ");
-				if (account.ValidatePIN(Console.ReadLine()))
-				{
-					printAccountDetails(account);
-				}
-				else
-				{
-					Console.WriteLine("Auth failed");
-				}
-
-				Console.WriteLine("Press enter to restart or any key then enter to quit");
-				if(Console.Read != null)
-				{
-					run = false;
-				}
-
-			}
 		}
 
-		static Bank createTestBank(string name)
+		static public Bank createTestBank(string name)
 		{
 			Bank testBank = new Bank(name);
-			testBank.CreateAccount("Andrew", "Checking", "1234");
-			testBank.CreateAccount("Andrew", "Savings", "1234");
-			testBank.CreateAccount("Drew", "Savings", "1234");
-			testBank.CreateAccount("Andy", "Checking", "1234");
+			Customer customer1 = testBank.AddCustomer("Andrew Houser", "1234");
+			Customer customer2 = testBank.AddCustomer("Le Bruh", "1234");
+			Account account1 = customer1.AddAccount("checkings");
+			Account account2 = customer1.AddAccount("savings");
+			Account account3 = customer2.AddAccount("savings");
+			account1.Deposit((decimal)12.23);
+			account2.Deposit((decimal)2349.12);
+			account3.Deposit((decimal)12.23);
+
 			return testBank;
 		}
-
-		static void printAccountDetails(Account account)
+		static public Bank createTestBank2(string name)
 		{
-			Console.WriteLine("Account number: " + account.AccountNumber);
-			Console.WriteLine("Account holder: " + account.AccountHolderName);
-			Console.WriteLine("Account amount: " + account.Balance);
-			Console.WriteLine("Account type: " + account.AccountType);
+			Bank testBank = new Bank(name);
+			Customer customer1 = testBank.AddCustomer("Andrew Jr", "1234");
+			Customer customer2 = testBank.AddCustomer("John", "1234");
+			Account account1 = customer1.AddAccount("checkings");
+			Account account2 = customer2.AddAccount("savings");
+			account1.Deposit((decimal)15.23);
+			account2.Deposit((decimal)1023.24);
+			return testBank;
 		}
+		
 
-		static void printTransactionDetails(Transaction transaction)
-		{
-			Console.WriteLine("Transaction ID: " + transaction.TransactionId);
-			Console.WriteLine("From Account #: " + transaction.FromAccount.AccountNumber);
-			Console.WriteLine("To Account #: " + transaction.ToAccount.AccountNumber);
-			Console.WriteLine("Amount: " + transaction.TransactionAmount);
-			Console.WriteLine("Transaction Status: " + transaction.Status); 
-		}
 	}
 }

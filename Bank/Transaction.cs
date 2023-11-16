@@ -21,7 +21,7 @@ namespace Bank
 			TransactionAmount = transactionAmount;
 			FromAccount = fromAccount;
 			ToAccount = toAccount;
-			Status = "Incomplete";
+			Status = "Pending";
 		}
 
 		public void Execute ()

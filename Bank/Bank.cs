@@ -8,39 +8,41 @@ using System.Transactions;
 
 namespace Bank
 {
-	internal class Bank
+	public class Bank
 	{
 
-		public string Name { get; private set; }
-		private List<Account> _accountList = new List<Account>();
+		public string BankName { get; private set; }
+		private List<Customer> _customerList = new List<Customer>();
 		private List<Transaction> _transactionList = new List<Transaction>();
 
 		public Bank(string name) {
-		Name = name;
+			BankName = name;
 		}
 
-		public Account CreateAccount(string accountHolderName, string accountType, string pin)
-		{
-			string accountNumber = "00000" + Convert.ToString(_accountList.Count + 1);
-
-			Account newAccount = new Account(accountHolderName,  accountType, pin, accountNumber);
-			_accountList.Add(newAccount);
-			return newAccount;
-		}
-		public Account FindAccount(string accountNumber) {
-			return _accountList.Find(x => x.AccountNumber.Equals(accountNumber));
-		}
-
-
-		public Transaction CreateTransaction(Account fromAccount, Account toAccount, decimal amount)
+		public Customer AddCustomer(string name, string pin)
 		{
 
-			string transactionId = "00000" + Convert.ToString(_transactionList.Count + 1);
+			string customerId = Convert.ToString(_customerList.Count + 1);
+
+			Customer newCustomer = new Customer( customerId,  name, pin);
+			_customerList.Add(newCustomer);
+			return newCustomer;
+		}
+
+		public Customer FindCustomerByName(string customerName)
+		{
+			return _customerList.Find(customer => customer.Name.Equals(customerName.ToUpper()));
+		}
+		public Transaction AddTransaction(Account fromAccount, Account toAccount, decimal amount)
+		{
+
+			string transactionId = Convert.ToString(_transactionList.Count + 1);
 
 			Transaction newTransaction = new Transaction(transactionId, amount, fromAccount, toAccount);
 			_transactionList.Add(newTransaction);
 			return newTransaction;
 		}
+
 		public Transaction FindTransaction(string transactionId)
 		{
 			return _transactionList.Find(transaction  => transaction.TransactionId.Equals(transactionId));
